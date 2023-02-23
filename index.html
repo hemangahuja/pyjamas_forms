@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pyjamas Form Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="text-center bg-gradient-to-r from-red-500 to-purple-900 text-white">
+    <header class="text-6xl m-5 mt-10 text-white">
+        PYJAMAS
+    </header>
+    <input type="text" class="border-4 p-3 rounded-lg bg-transparent placeholder:text-white" id="fname"
+        placeholder="Enter Form Name">
+    <input type="text" class="border-4 p-3 rounded-lg bg-transparent placeholder:text-white" id="dbname"
+        placeholder="Enter DB Name">
+    <input type="number" class="border-4 p-3 rounded-lg bg-transparent placeholder:text-white" id="numfields">
+    <form class="flex flex-col m-auto mt-20 align-center gap-10 text-2xl w-fit" id="form">
+    </form>
+    <input class="text-white border-4 p-4 rounded-lg hover:cursor-pointer" type="submit" value="Create Form"
+        form="form">
+    <script>
+        const numfields = document.getElementById("numfields");
+        const form = document.getElementById("form");
+
+        function download(filename, text, type = "text/plain") {
+            // Create an invisible A element
+            const a = document.createElement("a");
+            a.style.display = "none";
+            document.body.appendChild(a);
+
+            // Set the HREF to a Blob representation of the data to be downloaded
+            a.href = window.URL.createObjectURL(
+                new Blob([text], { type })
+            );
+
+            // Use download attribute to set set desired file name
+            a.setAttribute("download", filename);
+
+            // Trigger the download by simulating click
+            a.click();
+
+            // Cleanup
+            window.URL.revokeObjectURL(a.href);
+            document.body.removeChild(a);
+        }
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const formData = [...new FormData(e.target)];
+
+            const f = new Map(formData);
+            console.log(...f.entries());
+            const ans = new Map();
+            for (let [key, value] of f.entries()) {
+                key = Number(key);
+                console.log(key, value);
+                if (key % 2 == 0) {
+                    if (f.has(String(key + 1))) {
+                        ans.set(value, true);
+                    } else {
+                        ans.set(value, false);
+                    }
+                }
+            }
+            const final = new Map();
+            final.set("form_name", document.getElementById("fname").value);
+            final.set("db_name", document.getElementById("dbname").value);
+            final.set("form", Object.fromEntries(ans));
+            const json = JSON.stringify(Object.fromEntries(final));
+            console.log(json);
+            download("form.json", json);
+        })
+
+        const createFormElement = (i) => {
+            const parent = document.createElement("div");
+            parent.classList.add("flex");
+
+            const input = document.createElement("input");
+            input.classList.add("border-4", "p-3", "rounded-lg", "bg-transparent", "placeholder:text-white");
+            input.setAttribute("name", String(i))
+
+            const toggle = document.createElement("input");
+            toggle.setAttribute("type", "radio");
+            toggle.setAttribute("name", String(i + 1));
+
+            parent.append(input, toggle);
+            return parent;
+        }
+        numfields.addEventListener("change", (e) => {
+            console.log(e.target.value);
+            const newTotalCount = Number(e.target.value);
+            const difference = newTotalCount - form.childElementCount;
+            if (difference < 0) {
+                console.log("here", difference);
+                [...form.children].splice(form.childElementCount + difference).forEach(e => e.remove());
+            }
+            else form.append(...new Array(difference).fill().map((_, i) => createFormElement(2 * (i + (newTotalCount - difference)))));
+        })
+    </script>
+</body>
+
+</html>
