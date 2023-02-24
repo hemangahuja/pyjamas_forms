@@ -17,7 +17,13 @@
         placeholder="Enter Form Name">
     <input type="text" class="border-4 p-3 rounded-lg bg-transparent placeholder:text-white" id="dbname"
         placeholder="Enter DB Name">
-    <input type="number" class="border-4 p-3 rounded-lg bg-transparent placeholder:text-white" id="numfields">
+    <input type="number" class="border-4 p-3 rounded-lg bg-transparent placeholder:text-white" id="numfields"
+        placeholder="Enter number of fields">
+    <div class="flex gap-10 m-auto align-center w-fit mt-20 text-2xl">
+        <span class="mr-30">Field Names</span>
+        <span class="ml-60">isEncrypted?</span>
+        <span>Part of Primary Key?</span>
+    </div>
     <form class="flex flex-col m-auto mt-20 align-center gap-10 text-2xl w-fit" id="form">
     </form>
     <input class="text-white border-4 p-4 rounded-lg hover:cursor-pointer" type="submit" value="Create Form"
@@ -27,23 +33,18 @@
         const form = document.getElementById("form");
 
         function download(filename, text, type = "text/plain") {
-            // Create an invisible A element
+
             const a = document.createElement("a");
             a.style.display = "none";
             document.body.appendChild(a);
 
-            // Set the HREF to a Blob representation of the data to be downloaded
             a.href = window.URL.createObjectURL(
                 new Blob([text], { type })
             );
 
-            // Use download attribute to set set desired file name
             a.setAttribute("download", filename);
-
-            // Trigger the download by simulating click
             a.click();
 
-            // Cleanup
             window.URL.revokeObjectURL(a.href);
             document.body.removeChild(a);
         }
@@ -58,12 +59,16 @@
             for (let [key, value] of f.entries()) {
                 key = Number(key);
                 console.log(key, value);
-                if (key % 2 == 0) {
-                    if (f.has(String(key + 1))) {
-                        ans.set(value, true);
-                    } else {
-                        ans.set(value, false);
-                    }
+                if (key % 3 == 0) {
+                    // if (f.has(String(key + 1))) {
+                    //     ans.set(value, true);
+                    // } else {
+                    //     ans.set(value, false);
+                    // }
+                    ans.set(value, {
+                        isEncrypted: f.has(String(key + 1)),
+                        primaryKey: f.has(String(key + 2))
+                    })
                 }
             }
             const final = new Map();
@@ -77,20 +82,26 @@
 
         const createFormElement = (i) => {
             const parent = document.createElement("div");
-            parent.classList.add("flex");
+            parent.classList.add("flex", "gap-40", "justify-end");
 
             const input = document.createElement("input");
-            input.classList.add("border-4", "p-3", "rounded-lg", "bg-transparent", "placeholder:text-white");
+            input.classList.add("border-4", "p-3", "rounded-lg", "bg-transparent", "placeholder:text-white", "justify-self-start", "-ml-28");
             input.setAttribute("name", String(i))
 
-            const toggle = document.createElement("input");
-            toggle.setAttribute("type", "radio");
-            toggle.setAttribute("name", String(i + 1));
+            const encryptToggle = document.createElement("input");
+            encryptToggle.setAttribute("type", "radio");
+            encryptToggle.setAttribute("name", String(i + 1));
+            encryptToggle.classList.add("w-5")
 
-            parent.append(input, toggle);
+            const PKToggle = document.createElement("input");
+            PKToggle.setAttribute("type", "radio");
+            PKToggle.setAttribute("name", String(i + 2));
+            PKToggle.classList.add("w-5");
+
+            parent.append(input, encryptToggle, PKToggle);
             return parent;
         }
-        numfields.addEventListener("change", (e) => {
+        numfields.addEventListener("input", (e) => {
             console.log(e.target.value);
             const newTotalCount = Number(e.target.value);
             const difference = newTotalCount - form.childElementCount;
@@ -98,7 +109,7 @@
                 console.log("here", difference);
                 [...form.children].splice(form.childElementCount + difference).forEach(e => e.remove());
             }
-            else form.append(...new Array(difference).fill().map((_, i) => createFormElement(2 * (i + (newTotalCount - difference)))));
+            else form.append(...new Array(difference).fill().map((_, i) => createFormElement(3 * (i + (newTotalCount - difference)))));
         })
     </script>
 </body>

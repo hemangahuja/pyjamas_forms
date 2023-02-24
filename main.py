@@ -6,6 +6,7 @@ import crypto
 form = json.load(open("form.json"))
 
 print(form)
+db = Database(form["db_name"] + ".csv")
 
 app = Flask(__name__)
 
@@ -18,17 +19,32 @@ def index():
 
 @app.route("/submit",methods=["POST"])
 def submit():
-    db = Database(form["db_name"] + ".csv")
     row = {}
     print("request.form")
     print(request.form)
-    for form_field,isEncrypted in form["form"].items():
+    for form_field,config in form["form"].items():
         data = request.form[form_field]
-        if isEncrypted:
+        if config['isEncrypted']:
             data = crypto.encrypt(data)
 
         row[form_field] = data
-    print(row)
+    # print(row)
     db.write(row)
+    # db.show()
     
     return "submitted!"
+
+@app.route("/find",methods=["POST"])
+def find():
+    try:
+        # for key in request.form:
+        #     if form['form'][key]:
+        #         request.form[key] = crypto.encrypt(request.form[key])
+        return db.find({key : {'data' : data,'isEncrypted' : form['form'][key]['isEncrypted']} for key,data in request.form.items()})
+    except Exception as e:
+        print("error",e)
+        return "Not Found"
+
+@app.route("/lookup",methods=["GET"])
+def lookup():
+    return render_template("lookup.html",form_name=form['form_name'],fields=[key for key,config in form['form'].items() if config['primaryKey']])

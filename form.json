@@ -1,5 +1,18 @@
 {
     "form_name": "a",
     "db_name": "b",
-    "form": { "a": false, "b": true, "c": false }
+    "form": {
+        "a": {
+            "isEncrypted": false,
+            "primaryKey": true
+        },
+        "b": {
+            "isEncrypted": true,
+            "primaryKey": true
+        },
+        "c": {
+            "isEncrypted": false,
+            "primaryKey": false
+        }
+    }
 }

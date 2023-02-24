@@ -16,9 +16,14 @@ def salter() -> str:
 
 def encrypt(text : str) -> str:
     """
-    Returns a SHA-256 hash of the the combined string of the following:
-    1. Plaintext password
-    2. Base 64 string of the username
+    Returns a SHA-256 hash of the text
     """
-    return hasher(text) + "#" + salter()
+    salt = salter()
+    return f"{hasher(text+salt)}#{salt}"
 
+def verify(text : str,hash : str,isEncypted : bool):
+    if not isEncypted:
+        return text == hash
+    else:
+        hashed,salt = hash.split("#")
+        return hasher(text + salt) == hashed
