@@ -60,11 +60,6 @@
                 key = Number(key);
                 console.log(key, value);
                 if (key % 3 == 0) {
-                    // if (f.has(String(key + 1))) {
-                    //     ans.set(value, true);
-                    // } else {
-                    //     ans.set(value, false);
-                    // }
                     ans.set(value, {
                         isEncrypted: f.has(String(key + 1)),
                         primaryKey: f.has(String(key + 2))

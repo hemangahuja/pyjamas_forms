@@ -1,29 +1,37 @@
-from hashlib import sha256
-import secrets
+from Crypto.Cipher import AES
+import base64
+import os
+from dotenv import load_dotenv
+load_dotenv('./.env')
 
 
-def hasher(text: str) -> str:
-    """
-    Takes a UTF-8 encoded piece of text of any length, and returns the SHA-256 hash of the text as a string object, in uppercase.
-    """
-    return sha256(bytes(text, "utf-8")).hexdigest().upper()
+def load_key():
+    key = os.getenv("ENCRYPTION_KEY")
+    if not key:
+        raise ValueError("No secret key set for encryption")
+    if len(key) != 16:
+        raise ValueError("Secret key must be 16 bytes long")
+    return key.encode()
 
-def salter() -> str:
-    """
-    Returns the base64 encoded string of the text,
-    """
-    return secrets.token_hex(8)
 
-def encrypt(text : str) -> str:
-    """
-    Returns a SHA-256 hash of the text
-    """
-    salt = salter()
-    return f"{hasher(text+salt)}#{salt}"
+key = load_key()
 
-def verify(text : str,hash : str,isEncypted : bool):
-    if not isEncypted:
-        return text == hash
-    else:
-        hashed,salt = hash.split("#")
-        return hasher(text + salt) == hashed
+
+def encrypt(message):
+    aes = AES.new(key, AES.MODE_ECB)
+    padded_message = message + " " * (16 - len(message) % 16)
+    encrypted_message = aes.encrypt(padded_message.encode())
+    return base64.b64encode(encrypted_message).decode()
+
+
+def decrypt(encrypted_message):
+    aes = AES.new(key, AES.MODE_ECB)
+    decrypted_message = aes.decrypt(
+        base64.b64decode(encrypted_message)).decode()
+    return decrypted_message.rstrip()
+
+
+def verify(plain_text, encrypted_message, is_encrypted):
+    if not is_encrypted:
+        return plain_text == encrypted_message
+    return plain_text == decrypt(encrypted_message)

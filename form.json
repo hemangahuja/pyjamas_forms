@@ -1,18 +1,1 @@
-{
-    "form_name": "a",
-    "db_name": "b",
-    "form": {
-        "a": {
-            "isEncrypted": false,
-            "primaryKey": true
-        },
-        "b": {
-            "isEncrypted": true,
-            "primaryKey": true
-        },
-        "c": {
-            "isEncrypted": false,
-            "primaryKey": false
-        }
-    }
-}
+{"form_name":"f","db_name":"db","form":{"name":{"isEncrypted":false,"primaryKey":true},"password":{"isEncrypted":true,"primaryKey":true}}}

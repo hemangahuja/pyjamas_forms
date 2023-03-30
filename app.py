@@ -26,7 +26,6 @@ def submit():
         data = request.form[form_field]
         if config['isEncrypted']:
             data = crypto.encrypt(data)
-
         row[form_field] = data
     # print(row)
     db.write(row)
