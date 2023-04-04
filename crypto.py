@@ -2,7 +2,8 @@ from Crypto.Cipher import AES
 import base64
 import os
 from dotenv import load_dotenv
-load_dotenv('./.env')
+
+load_dotenv("./.env")
 
 
 def load_key():
@@ -26,8 +27,7 @@ def encrypt(message):
 
 def decrypt(encrypted_message):
     aes = AES.new(key, AES.MODE_ECB)
-    decrypted_message = aes.decrypt(
-        base64.b64decode(encrypted_message)).decode()
+    decrypted_message = aes.decrypt(base64.b64decode(encrypted_message)).decode()
     return decrypted_message.rstrip()
 
 
