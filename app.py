@@ -22,6 +22,9 @@ def log_request():
 def index():
     return render_template("index.html", form_name=form['form_name'], fields=form['form'].keys())
 
+@app.route('/home')
+def home():
+    return render_template('home.html')
 
 @app.route("/submit", methods=["POST"])
 def submit():
