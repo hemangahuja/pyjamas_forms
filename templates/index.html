@@ -2,25 +2,132 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{form_name}}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <title>Pyjamas</title>
+  <link rel="stylesheet" href="./static/css/style.css">
+  <link rel="icon" href="./static/images/Blue Black Business Logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&family=Space+Grotesk:wght@700&display=swap"
+    rel="stylesheet">
 </head>
 
-<body class="text-center bg-gradient-to-r from-red-500 to-purple-900 text-white">
-    <header class="text-6xl m-5 mt-10 text-white">
-        Form {{form_name}}
-    </header>
-    <form class="flex m-auto mt-20 flex-col align-center gap-10 text-2xl w-fit" id="form"
-        action="{{ url_for('submit') }}" method="post">
-        {% for field in fields %}
-        <input class="border-4 p-3 rounded-lg bg-transparent placeholder:text-white" type="text"
-            placeholder="Enter {{field}}" name="{{field}}">
-        {% endfor %}
-        <input class="text-white border-4 p-4 rounded-lg hover:cursor-pointer" type="submit" value="Submit">
+<body>
+  <div class="login-box">
+    <div class="form-container">
+      <h1 class="text-5xl">Pyjamas</h1>
+      <form>
+        <div class="user-box">
+          <input type="text" name="" required="" id="fname">
+          <label>Username</label>
+        </div>
+        <div class="user-box">
+          <input type="text" name="" required="" id="dbname">
+          <label>Password</label>
+        </div>
+        <div class="user-box">
+          <input type="number" name="" required="" id="numfields">
+          <label>Enter No of Fields</label>
+        </div>
+        <div class="flex flex-col items-center justify-center">
+          <a href="#">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <input type="submit" value="Create Form" form="form">
+        </div>
+        </a>
+      </form>
+      <div class="grid grid-cols-4 gap-10 m-auto align-center w-fit mt-20 text-16px">
+        <span class="col-span-2 text-white">Field Names</span>
+        <span class="text-white">Should this field be encrypted?</span>
+        <span class="text-white">Constitutes primary key?</span>
+      </div>
+    </div>
+    <form class="flex flex-col m-auto mt-20 align-center gap-7 text-16px w-fit" id="form">
     </form>
+    <script>
+      const numfields = document.getElementById("numfields");
+      const form = document.getElementById("form");
+
+      function download(filename, text, type = "text/plain") {
+
+        const a = document.createElement("a");
+        a.style.display = "none";
+        document.body.appendChild(a);
+
+        a.href = window.URL.createObjectURL(
+          new Blob([text], { type })
+        );
+
+        a.setAttribute("download", filename);
+        a.click();
+
+        window.URL.revokeObjectURL(a.href);
+        document.body.removeChild(a);
+      }
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const formData = [...new FormData(e.target)];
+
+        const f = new Map(formData);
+        console.log(...f.entries());
+        const ans = new Map();
+        for (let [key, value] of f.entries()) {
+          key = Number(key);
+          console.log(key, value);
+          if (key % 3 == 0) {
+            ans.set(value, {
+              isEncrypted: f.has(String(key + 1)),
+              primaryKey: f.has(String(key + 2))
+            })
+          }
+        }
+        const final = new Map();
+        final.set("form_name", document.getElementById("fname").value);
+        final.set("db_name", document.getElementById("dbname").value);
+        final.set("form", Object.fromEntries(ans));
+        const json = JSON.stringify(Object.fromEntries(final));
+        console.log(json);
+        download("form.json", json);
+      })
+
+      const createFormElement = (i) => {
+        const parent = document.createElement("div");
+        parent.classList.add("flex", "gap-40", "justify-end");
+
+        const input = document.createElement("input");
+        input.classList.add("border-4", "p-3", "rounded-lg", "placeholder:text-white", "justify-self-start", "-ml-35");
+        input.setAttribute("name", String(i))
+
+        const encryptToggle = document.createElement("input");
+        encryptToggle.setAttribute("type", "checkbox");
+        encryptToggle.setAttribute("name", String(i + 1));
+        encryptToggle.classList.add("w-5")
+
+        const PKToggle = document.createElement("input");
+        PKToggle.setAttribute("type", "checkbox");
+        PKToggle.setAttribute("name", String(i + 2));
+        PKToggle.classList.add("w-5");
+
+        parent.append(input, encryptToggle, PKToggle);
+        return parent;
+      }
+      numfields.addEventListener("input", (e) => {
+        console.log(e.target.value);
+        const newTotalCount = Number(e.target.value);
+        const difference = newTotalCount - form.childElementCount;
+        if (difference < 0) {
+          console.log("here", difference);
+          [...form.children].splice(form.childElementCount + difference).forEach(e => e.remove());
+        }
+        else form.append(...new Array(difference).fill().map((_, i) => createFormElement(3 * (i + (newTotalCount - difference)))));
+      })
+    </script>
+  </div>
 </body>
 
 </html>

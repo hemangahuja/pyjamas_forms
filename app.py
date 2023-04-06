@@ -20,11 +20,15 @@ def log_request():
 
 @app.route("/", methods=["GET"])
 def index():
-    return render_template("index.html", form_name=form['form_name'], fields=form['form'].keys())
+    return render_template(
+        "index.html", form_name=form["form_name"], fields=form["form"].keys()
+    )
 
-@app.route('/home')
+
+@app.route("/home")
 def home():
-    return render_template('home.html') 
+    return render_template("home.html")
+
 
 @app.route("/submit", methods=["POST"])
 def submit():
@@ -33,7 +37,7 @@ def submit():
     print(request.form)
     for form_field, config in form["form"].items():
         data = request.form[form_field]
-        if config['isEncrypted']:
+        if config["isEncrypted"]:
             data = crypto.encrypt(data)
         row[form_field] = data
     # print(row)
@@ -46,7 +50,12 @@ def submit():
 @app.route("/find", methods=["POST"])
 def find():
     try:
-        return db.find({key: {'data': data, 'isEncrypted': form['form'][key]['isEncrypted']} for key, data in request.form.items()})
+        return db.find(
+            {
+                key: {"data": data, "isEncrypted": form["form"][key]["isEncrypted"]}
+                for key, data in request.form.items()
+            }
+        )
     except Exception as e:
         print("error", e)
         return "Not Found"
@@ -54,11 +63,15 @@ def find():
 
 @app.route("/lookup", methods=["GET"])
 def lookup():
-    return render_template("lookup.html", form_name=form['form_name'], fields=[key for key, config in form['form'].items() if config['primaryKey']])
+    return render_template(
+        "lookup.html",
+        form_name=form["form_name"],
+        fields=[key for key, config in form["form"].items() if config["primaryKey"]],
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import logging
-    logging.basicConfig(filename='error.log', level=logging.DEBUG)
 
-    app.run(host="0.0.0.0")
+    logging.basicConfig(filename="error.log", level=logging.DEBUG)
+    app.run(host="0.0.0.0", port=80, debug=True)
