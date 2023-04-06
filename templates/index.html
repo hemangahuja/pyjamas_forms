@@ -17,6 +17,23 @@
   <div class="login-box">
     <div class="form-container">
       <h1 class="text-5xl">Pyjamas</h1>
+      {% if form_name %}
+      <section class="existing-form-fields mb-10">
+        <p>A form is already setup in the directory!</p>
+        <p>Do you want to look at the fields?</p>
+        <details>
+          <summary class="mb-5">
+            <span class="icon">👇</span>
+          </summary>
+          <p>The fields are:</p>
+          <ul>
+            {%for field in fields %}
+            <li>{{ field }}</li>
+            {%endfor%}
+          </ul>
+        </details>
+      </section>
+      {% endif %}
       <form>
         <div class="user-box">
           <input type="text" name="" required="" id="fname">

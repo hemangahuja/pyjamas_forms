@@ -1,6 +1,7 @@
-from Crypto.Cipher import AES
 import base64
 import os
+
+from Crypto.Cipher import AES
 from dotenv import load_dotenv
 
 load_dotenv("./.env")
@@ -35,3 +36,10 @@ def verify(plain_text, encrypted_message, is_encrypted):
     if not is_encrypted:
         return plain_text == encrypted_message
     return plain_text == decrypt(encrypted_message)
+
+
+class Cipher:
+    def __init__(self, encryption_function, decryption_function, description):
+        self.encrypt = encryption_function
+        self.decrypt = decryption_function
+        self.__doc__ = description

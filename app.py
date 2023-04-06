@@ -1,14 +1,20 @@
+import json
 import logging
 import logging.config
-from flask import Flask, request, render_template
-import json
-from database import Database
+
 import crypto
+from database import Database
+from flask import Flask, render_template, request
 
-form = json.load(open("form.json"))
 
-print(form)
-db = Database(form["db_name"] + ".csv")
+def load_form(filename: str = "pyjamas_config.json"):
+    with open(filename, "r"):
+        return json.load(open("pyjamas_config.json"))
+
+
+pyjamas_config = load_form()
+
+db = Database(pyjamas_config["db_name"] + ".csv")
 
 app = Flask(__name__)
 
@@ -21,7 +27,9 @@ def log_request():
 @app.route("/", methods=["GET"])
 def index():
     return render_template(
-        "index.html", form_name=form["form_name"], fields=form["form"].keys()
+        "index.html",
+        form_name=pyjamas_config["form_fields"],
+        fields=pyjamas_config["form_fields"].keys(),
     )
 
 
@@ -33,9 +41,8 @@ def home():
 @app.route("/submit", methods=["POST"])
 def submit():
     row = {}
-    print("request.form")
     print(request.form)
-    for form_field, config in form["form"].items():
+    for form_field, config in pyjamas_config["form_fields"].items():
         data = request.form[form_field]
         if config["isEncrypted"]:
             data = crypto.encrypt(data)
@@ -44,7 +51,7 @@ def submit():
     db.write(row)
     # db.show()
 
-    return "submitted!"
+    return {"Submitted": True}
 
 
 @app.route("/find", methods=["POST"])
@@ -52,7 +59,10 @@ def find():
     try:
         return db.find(
             {
-                key: {"data": data, "isEncrypted": form["form"][key]["isEncrypted"]}
+                key: {
+                    "data": data,
+                    "isEncrypted": pyjamas_config["form_fields"][key]["isEncrypted"],
+                }
                 for key, data in request.form.items()
             }
         )
@@ -65,8 +75,12 @@ def find():
 def lookup():
     return render_template(
         "lookup.html",
-        form_name=form["form_name"],
-        fields=[key for key, config in form["form"].items() if config["primaryKey"]],
+        form_name=pyjamas_config["form_name"],
+        fields=[
+            key
+            for key, config in pyjamas_config["form_fields"].items()
+            if config["primaryKey"]
+        ],
     )
 
 
