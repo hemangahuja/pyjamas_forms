@@ -3,3 +3,4 @@ __pycache__
 .env
 load_balancer/node_modules
 *.log
+firebase-creds-pyjamas.json
