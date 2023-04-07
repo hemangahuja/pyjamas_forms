@@ -4,6 +4,8 @@ import path from "path";
 const sprightly = require("sprightly");
 const httpProxy = require("http-proxy");
 
+
+//configures the load balancer to point to the specified port using the specified algorithm
 const [basePort, _count, algorithm] = process.argv.slice(2);
 const count = Number(_count);
 const app = express();
@@ -13,8 +15,10 @@ app.set("views", "./");
 let current = 0;
 let requestCountCurrent = 0;
 
+//creates proxy instance for request forwarding
 const proxy = httpProxy.createProxyServer({});
 
+// hashes a string to a number
 const hashCode = (str: string): number => {
     let hash = 0;
     if (str.length === 0) return hash;
@@ -26,6 +30,7 @@ const hashCode = (str: string): number => {
     return hash;
 };
 
+//returns index of the server to be used using different algorithms for load balancing.
 const getServer = (options?: object): number => {
     switch (algorithm) {
         case "round-robin": {
@@ -51,6 +56,7 @@ const getServer = (options?: object): number => {
     return 0;
 };
 
+//processes the request and returns the response after balancing the load
 const handler = async (req: express.Request, res: express.Response) => {
     const { method, headers, body, url, query } = req;
     const data = {
@@ -75,10 +81,14 @@ const handler = async (req: express.Request, res: express.Response) => {
         res.status(500).send("Server error!");
     }
 };
+
+
 app.get("/favicon.ico", (req, res) =>
     res.sendFile(path.join(__dirname, "/favicon.ico"))
 );
 
+//starts the server at the specified port
+
 app.use(handler);
 
-app.listen(8080, () => console.log("Load balancer running at port 8080"));
+app.listen(1337, () => console.log("Load balancer running at port 1337"));

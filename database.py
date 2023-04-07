@@ -7,6 +7,9 @@ firebase_db = db.reference("data")
 
 
 class Database:
+    '''
+        initialize the database instance
+    '''
     def __init__(self, database_name) -> None:
         self.database_name = database_name
         self.appendStream = open(database_name, "a+")
@@ -17,6 +20,9 @@ class Database:
         )
         self.rows = [*self.reader]
 
+    '''
+        write a row to the database
+    '''
     def write(self, row):
 
         if os.stat(self.database_name).st_size == 0:
@@ -28,10 +34,17 @@ class Database:
         self.appendStream.flush()
         firebase_db.push(row)
 
+    '''
+        prints all the rows in the database
+    '''
     def show(self):
         print(self.rows)
 
-    def find(self, primary_keys):
+    '''
+        find operaton on the database, loops through all the encrypted data to find the matching row
+    '''
+    def find(self, primary_keys,config):
+        print(primary_keys)
         for row in self.rows:
             if all(
                 verify(details["data"], row[key], details["isEncrypted"])
@@ -39,7 +52,7 @@ class Database:
             ):
                 return {
                     key: row[key]
-                    if not primary_keys[key]["isEncrypted"]
+                    if not config["form_fields"][key]["isEncrypted"]
                     else decrypt(row[key])
                     for key in row
                 }

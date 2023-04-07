@@ -37,25 +37,17 @@
       <form>
         <div class="user-box">
           <input type="text" name="" required="" id="fname">
-          <label>Username</label>
+          <label>Enter name of the form</label>
         </div>
         <div class="user-box">
           <input type="text" name="" required="" id="dbname">
-          <label>Password</label>
+          <label>Enter name of the database</label>
         </div>
         <div class="user-box">
           <input type="number" name="" required="" id="numfields">
           <label>Enter No of Fields</label>
         </div>
-        <div class="flex flex-col items-center justify-center">
-          <a href="#">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            <input type="submit" value="Create Form" form="form">
-        </div>
-        </a>
+        
       </form>
       <div class="grid grid-cols-4 gap-10 m-auto align-center w-fit mt-20 text-16px">
         <span class="col-span-2 text-white">Field Names</span>
@@ -65,6 +57,11 @@
     </div>
     <form class="flex flex-col m-auto mt-20 align-center gap-7 text-16px w-fit" id="form">
     </form>
+    <div class="flex flex-col items-center justify-center">
+      <a href="#">
+        <input class="p-5" type="submit" value="Create Form" form="form">
+      </a>
+      </div>
     <script>
       const numfields = document.getElementById("numfields");
       const form = document.getElementById("form");
@@ -106,10 +103,10 @@
         const final = new Map();
         final.set("form_name", document.getElementById("fname").value);
         final.set("db_name", document.getElementById("dbname").value);
-        final.set("form", Object.fromEntries(ans));
+        final.set("form_fields", Object.fromEntries(ans));
         const json = JSON.stringify(Object.fromEntries(final));
         console.log(json);
-        download("form.json", json);
+        download("pyamas_config.json", json);
       })
 
       const createFormElement = (i) => {
@@ -117,7 +114,7 @@
         parent.classList.add("flex", "gap-40", "justify-end");
 
         const input = document.createElement("input");
-        input.classList.add("border-4", "p-3", "rounded-lg", "placeholder:text-white", "justify-self-start", "-ml-35");
+        input.classList.add("text-black","border-4", "p-3", "rounded-lg", "placeholder:text-white", "justify-self-start", "-ml-35");
         input.setAttribute("name", String(i))
 
         const encryptToggle = document.createElement("input");

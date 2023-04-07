@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{form_name}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="text-center bg-gradient-to-r from-red-500 to-purple-900 text-white">
+    <header class="text-6xl m-5 mt-10 text-white">
+        Form {{form_name}}
+    </header>
+    <form class="flex m-auto mt-20 flex-col align-center gap-10 text-2xl w-fit" id="form"
+        action="{{ url_for('submit') }}" method="post">
+        {% for field in fields %}
+        <input class="border-4 p-3 rounded-lg bg-transparent placeholder:text-white" type="text"
+            placeholder="Enter {{field}}" name="{{field}}">
+        {% endfor %}
+        <input class="text-white border-4 p-4 rounded-lg hover:cursor-pointer" type="submit" value="Submit">
+    </form>
+</body>
+
+</html>

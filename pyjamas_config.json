@@ -1,8 +1,0 @@
-{
-    "form_name": "vishal",
-    "db_name": "pass",
-    "form_fields": {
-        "name": { "isEncrypted": true, "primaryKey": true },
-        "password": { "isEncrypted": true, "primaryKey": true }
-    }
-}
