@@ -1,0 +1,10 @@
+Author: Sreenath S(StormPredator-Sr)
+
+sreenath - (Added templates for frontend)
+bed4513cf24331c8ee73111a2db9fa81f74087ef
+
+fix server 
+3dbe21fcd80e1fd68abca98f0f1eb0ca77970a16
+
+Use AES_Cipher class
+76545d2bd3b59aad215e2514a52767968532ff3f

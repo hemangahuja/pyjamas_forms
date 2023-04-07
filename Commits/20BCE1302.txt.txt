@@ -1,0 +1,13 @@
+Author: hemangahuja (Hemang Ahuja)
+
+Initial commit
+111b62f35093dfef5b0b8cf9b9b2f4672839f64e
+
+add lookup and primary key feature
+cda0093e23913f839f1cf98755a7e7ce217f4797
+
+implement encryption
+dc25cc96358aa3fbb22adc53b4bbb10e5bd4ae69
+
+added load_balancer and logging
+926ff191337982c64389f04b8e7c471b04aa0f93
