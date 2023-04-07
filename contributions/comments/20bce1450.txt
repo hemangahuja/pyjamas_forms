@@ -1,0 +1,22 @@
+database.py
+
+initialize the database instance
+write a row to the database
+prints all the rows in the database
+find operaton on the database, loops through all the encrypted data to find the matching row
+
+app.py
+
+loading the config
+create the database
+create a logger instance for logging purposes
+logging each request
+load the configuration file and render the index template
+get a form response and encrypts the fields that are to be encrypted
+writes the processed data to the database
+gets a form response to be searched for in the database
+decrypts the rows in database based on encryption key and matches to form response
+returns the row if found
+renders a ui for searching in the database with the appropriate primary keys
+renders a ui for inserting a row in database
+runs the application

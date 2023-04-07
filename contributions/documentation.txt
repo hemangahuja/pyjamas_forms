@@ -1,0 +1,19 @@
+Contribution File
+This documentation was created by a team of 3 people:
+
+20BCE1043
+20BCE1302
+20BCE1450
+Task Allocation
+The task was divided among the team members as follows:
+
+20BCE1043: Database Creation, Endpoints Creation, and Firebase Cloud Firestore Integration.
+20BCE1302: Cipher Implementation and Load Balancer Implementation.
+20BCE1450: Dynamic Backend Creation and UI Template Creation.
+
+Collaboration
+The team collaborated effectively throughout the project using GitHub to manage the documentation. Each team member was responsible for creating and reviewing their assigned sections, ensuring consistency in formatting, and providing feedback on each other's work.
+
+The team used a collaborative approach to ensure that the documentation was comprehensive, accurate, and well-organized. We held regular meetings to discuss progress, clarify any questions or issues, and ensure that the documentation met the project requirements.
+
+Overall, the team worked well together, and we were able to complete the project on time and to a high standard. We are proud of our collaboration and the documentation we produced.

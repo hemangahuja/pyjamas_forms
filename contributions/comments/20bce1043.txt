@@ -1,0 +1,34 @@
+# Create a new DES object with the key and mode
+# Pad the message to a multiple of 8 bytes using spaces
+# Encrypt the padded message using DES
+# Encode the encrypted message in base64 and return as a string
+# Create a new DES object with the key and mode
+# Decode the encrypted message from base64
+# Decrypt the decoded message using DES
+# Remove any trailing whitespace from the decrypted message and return
+# Create a new AES object with the key and mode
+# Pad the message to a multiple of 16 bytes using spaces
+# Encrypt the padded message using AES
+# Encode the encrypted message in base64 and return as a string
+# Create a new AES object with the key and mode
+# Decode the encrypted message from base64
+# Decrypt the decoded message using AES
+# Remove any trailing whitespace from the decrypted message and return
+# Check if character is a letter
+# Convert to uppercase
+# Apply shift based on key
+# Add shifted character to result
+# Add non-letter character as is
+# Check if character is a letter
+# Convert to uppercase
+# Apply reverse shift based on key
+# Add shifted character to result
+# Add non-letter character as is
+# Create a new instance of the Blowfish cipher with the provided key and ECB mode
+# Pad the plaintext to match the block size of the cipher
+# Encrypt the padded plaintext using the Blowfish cipher
+# Encode the encrypted plaintext using base64 and return the result
+# Create a new instance of the Blowfish cipher with the provided key and ECB mode
+# Decode the base64-encoded encrypted plaintext
+# Decrypt the encrypted plaintext using the Blowfish cipher
+# Unpad the decrypted plaintext and decode it to return the result
