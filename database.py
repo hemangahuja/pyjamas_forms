@@ -1,6 +1,6 @@
 import csv
 import os
-from crypto import verify, decrypt
+from crypto import AES_Cipher
 from firebase_functions import db
 
 firebase_db = db.reference("data")
@@ -47,25 +47,25 @@ class Database:
         print(primary_keys)
         for row in self.rows:
             if all(
-                verify(details["data"], row[key], details["isEncrypted"])
+                AES_Cipher.verify(details["data"], row[key], details["isEncrypted"])
                 for key, details in primary_keys.items()
             ):
                 return {
                     key: row[key]
                     if not config["form_fields"][key]["isEncrypted"]
-                    else decrypt(row[key])
+                    else AES_Cipher.decrypt(row[key])
                     for key in row
                 }
         data = firebase_db.get()
         for row in data:
             if all(
-                verify(details["data"], row[key], details["isEncrypted"])
+                AES_Cipher.verify(details["data"], row[key], details["isEncrypted"])
                 for key, details in primary_keys.items()
             ):
                 return {
                     key: row[key]
                     if not primary_keys[key]["isEncrypted"]
-                    else decrypt(row[key])
+                    else AES_Cipher.decrypt(row[key])
                     for key in row
                 }
         raise Exception("Row not found")

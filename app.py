@@ -2,14 +2,14 @@ import json
 import logging
 import logging.config
 
-import crypto
+from crypto import AES_Cipher
 from database import Database
 from flask import Flask, render_template, request
 
 '''
 loading the config
 '''
-def load_form(filename: str = "C:\\Users\\Sreenath\\Desktop\\n1\\pyjamas_forms\\pyamas_config.json"):
+def load_form(filename: str = "C:\\Users\\Sreenath\\Desktop\\n1\\pyjamas_forms\\pyjamas_config.json"):
     with open(filename, "r") as f:
         return json.load(f)
 
@@ -85,7 +85,7 @@ def submit():
     for form_field, config in pyjamas_config["form_fields"].items():
         data = request.form[form_field]
         if config["isEncrypted"]:
-            data = crypto.encrypt(data)
+            data = AES_Cipher.encrypt(data)
         row[form_field] = data
     db.write(row)
 
