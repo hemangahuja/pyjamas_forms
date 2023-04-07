@@ -1,0 +1,23 @@
+load_balancer.ts
+
+//configures the load balancer to point to the specified port using the specified algorithm
+//creates proxy instance for request forwarding
+//hashes a string to a number
+//returns index of the server to be used using different algorithms for load balancing.
+//processes the request and returns the response after balancing the load
+//starts the server at the specified port
+
+server.ts
+
+//creates count number of server connections for balancing the load
+//process request
+//create handler for each connection
+//start listening on all the connections
+
+http-proxy.ts
+
+// Create your proxy server and set the target in the options.
+// Create your target server
+// Create your custom server and just call `proxy.web()` to proxy
+// a web request to the target passed in the options
+// also you can use `proxy.ws()` to proxy a websockets request
